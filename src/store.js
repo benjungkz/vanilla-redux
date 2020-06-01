@@ -1,42 +1,50 @@
-import { createStore } from 'redux';
+import { createStore } from 'redux'; 
+import { createAction, createReducer, configureStore, createSlice } from '@reduxjs/toolkit';
 
-// Event
-const ADD = "ADD";
-const DEL = "DELETE";
+// // Action Creator ( Toolkit )
+// const addToDo = createAction("ADD");
+// const deleteToDo = createAction("DELETE");
 
-// Action Creator
-const addToDo = text =>{
-    return{
-        type: ADD,
-        text
+// // Reducer ( original )
+// const reducer = ( state = [], action ) => {
+//     switch(action.type){
+//         case addToDo.type:
+//             return[{ text: action.payload, id: Date.now() }, ...state];
+//         case deleteToDo.type:
+//             return state.filter(toDo => toDo.id !== action.payload);
+//         default:
+//             return state;
+//     }
+// }
+
+// // Reducer ( Toolkit )
+// const reducer = createReducer( [], {
+//     [addToDo] : ( state, action ) => {
+//         // Mutating the state is possible!
+//         state.push( { text: action.payload, id: Date.now() } );
+//     },
+//     [deleteToDo] : ( state, action ) => 
+//         state.filter(toDo => toDo.id !== action.payload)
+    
+// });
+
+// Slide ( Toolkit )
+const toDos = createSlice({
+    name: 'toDosReducer',
+    initialState: [],
+    reducers:{
+        add: ( state, action ) => { 
+            state.push( { text: action.payload, id: Date.now()});
+        },
+        remove: ( state, action ) => state.filter(toDo => toDo.id !== action.payload)
     }
-}
+});
 
-const deleteToDo = id =>{
-    return{
-        type: DEL,
-        id: parseInt(id)
-    }
-}
+// Store ( Toolkit )
+const store = configureStore({ reducer: toDos.reducer });
 
-
-// Reducer
-const reducer = ( state = [], action ) => {
-    switch(action.type){
-        case ADD:
-            return[{ text: action.text, id: Date.now() }, ...state];
-        case DEL:
-            return state.filter(toDo => toDo.id !== action.id);
-        default:
-            return state;
-    }
-}
-// Store
-const store = createStore(reducer);
 
 // Export
-export const actionCreators = {
-    addToDo,
-    deleteToDo
-}
+export const  { add, remove } = toDos.actions;
+
 export default store;

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { actionCreators } from "../store";
+import { add } from "../store";
 import Todo from "../components/Todo";
 
 function Home({ toDos, addTodo }){
     
-    //?
+    // Hook
     const [ text, setText ] = useState("");
 
+    console.log(typeof text);
+    console.log(typeof setText);
+    
     function onChange(e){
         setText(e.target.value);
     }
@@ -45,7 +48,7 @@ function mapStateToProps( state ){
 // Map Dispatch to Props
 function mapDispatchToProps( dispatch ){
     return {
-        addTodo: (text) => dispatch(actionCreators.addToDo(text)),
+        addTodo: (text) => dispatch(add(text)),
     }
 }
 
